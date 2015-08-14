@@ -8,8 +8,8 @@ You only have to add working user to Remote Server. This Ansible script install 
 Setup
 -----
 
-- Install (docker-toolbox)[https://www.docker.com/toolbox]
-- Install (Ansible)[http://www.ansible.com/home]
+- Install [docker-toolbox](https://www.docker.com/toolbox)
+- Install [Ansible](http://www.ansible.com/home)
 
 ```
 # Change remote host name
