@@ -1,0 +1,6 @@
+---
+- hosts: sakura
+  remote_user: "{{ REMOTE_USER }}"
+
+  roles:
+    - init

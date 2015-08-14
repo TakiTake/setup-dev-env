@@ -1,0 +1,28 @@
+---
+  # Local
+  - name: docker-machine created on Local?
+    shell: docker-machine ls -q | grep {{ machine_name_local }}
+    ignore_errors: True
+    register: machine_created_local
+
+  - name: docker-machine create on Local
+    shell: >
+      docker-machine create \
+        --driver virtualbox \
+        {{ machine_name_local }}
+    when: machine_created_local|failed
+
+  # Remote Server
+  - name: docker-machine created on Remote Server?
+    shell: docker-machine ls -q | grep {{ machine_name_remote }}
+    ignore_errors: True
+    register: machine_created_remote
+
+  - name: docker-machine create on Remote Server
+    shell: >
+      docker-machine create \
+        --driver generic \
+        --generic-ip-address {{ REMOTE_IP }} \
+        --generic-ssh-user {{ REMOTE_USER }} \
+        {{ machine_name_remote }}
+    when: machine_created_remote|failed

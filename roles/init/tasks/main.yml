@@ -1,0 +1,14 @@
+---
+  - name: copy ssh public key
+    authorized_key: >
+      user={{ REMOTE_USER }}
+      key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+  - name: add a sudo user
+    sudo: True
+    lineinfile: >
+      dest=/etc/sudoers
+      backup=yes
+      state=present
+      regexp='^{{ REMOTE_USER }}'
+      line='{{ REMOTE_USER }} ALL=(ALL) NOPASSWD: ALL'

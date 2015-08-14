@@ -1,0 +1,43 @@
+---
+  # Swarm Token
+  - name: docker swarm create on local
+    shell: eval "$(docker-machine env local)" && docker run --rm swarm create
+    register: swarm_token
+    notify:
+      - store swarm token
+
+  - debug: var=swarm_token
+
+  # Swarm Master
+  - name: docker-swarm mster created?
+    shell: docker-machine ls -q | grep {{ swarm_master_name }}
+    ignore_errors: True
+    register: swarm_master_created
+
+  - name: docker-swarm master create
+    shell: >
+      docker-machine create \
+        --driver virtualbox \
+        --swarm \
+        --swarm-master \
+        --swarm-discovery token://{{ swarm_token.stdout }} \
+        {{ swarm_master_name }}
+    when: swarm_master_created|failed
+
+  # Swarm Node
+  - name: docker-swarm node created?
+    shell: docker-machine ls -q | grep {{ swarm_node_name }}
+    ignore_errors: True
+    register: swarm_node_created
+
+  - name: docker-swarm node create
+    shell: >
+      docker-machine create \
+        --driver generic \
+        --generic-ip-address {{ REMOTE_IP }} \
+        --generic-ssh-user {{ REMOTE_USER }} \
+        --swarm \
+        --swarm-discovery token://{{ swarm_token.stdout }} \
+        {{ swarm_node_name }}
+    when: swarm_node_created|failed
+

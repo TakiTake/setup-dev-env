@@ -1,0 +1,6 @@
+---
+  - name: store swarm token
+    template: >
+      src=swarm_token.j2
+      dest={{ swarm_token_path }}
+      backup=yes

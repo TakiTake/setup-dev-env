@@ -1,0 +1,13 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    machine_name_local: local
+    machine_name_remote: sakura
+    swarm_master_name: swarm-master
+    swarm_node_name: swarm-node-sakura
+    swarm_token_path: "{{ ansible_env.PWD }}/.swarm_token"
+
+  roles:
+    - docker
